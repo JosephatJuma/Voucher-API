@@ -18,11 +18,18 @@ model User {
   id        String     @id @default(uuid())
   username  String     @unique
   password  String
+  rolse     Role       @default(USER)
   createdAt DateTime   @default(now())
   Voucher   Voucher[]
   UsageLog  UsageLog[]
 
   @@map("users")
+}
+
+enum Role {
+  ADMIN
+  USER
+  VENDOR
 }
 
 model Voucher {
