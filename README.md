@@ -7,19 +7,19 @@ clone this repo
 ## Step 2:
 
 Move to the cloned directory
-`cd Voucher-API `
+```cd Voucher-API```
 
 ## Step 3:
 
 Install the required modules and dependencies
 
-Run `npm install`
+Run ```npm install```
 
 ## Step 4:
 
 step up the environment variables
 
-Run `touch .env` to create .env file in the root dir
+Run ```touch .env``` to create .env file in the root dir
 
 In the env file
 
@@ -29,8 +29,10 @@ Add env variables to look like those in the .env.example file in the root dir
 
 - With postgresql Database running on localhost port 5432, Run migrations to the local database
   Run 
-` npx prisma init --datasource-provider sqlite --output ../generated/prisma npm run migrate dev`
-`npx prisma migrate dev --name init`
+
+```npx prisma init --datasource-provider sqlite --output ../generated/prisma npm run migrate dev```
+
+```npx prisma migrate dev --name init```
 - In case your database is running on a different port, change the port in the env variable DATABASE_URL
 
 This will create a new debase called voucher_db on the local server and everything is app for local development
