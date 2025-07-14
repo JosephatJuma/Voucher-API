@@ -26,11 +26,12 @@ export class AuthService {
       data: {
         username: dto.username,
         password: hashedPassword,
+        role: dto.role ?? 'USER',
       },
     });
     return {
       message: 'User created successfully',
-      user: { username: user.username, id: user.id },
+      user: { username: user.username, id: user.id, role: user.role },
     };
   }
 
@@ -51,7 +52,7 @@ export class AuthService {
     const tokens = await this.jwt.signTokens(
       userExists.id,
       userExists.username,
-      userExists.password,
+      userExists.role,
     );
 
     return {

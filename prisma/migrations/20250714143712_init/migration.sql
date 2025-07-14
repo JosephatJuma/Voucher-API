@@ -1,34 +1,18 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER', 'VENDOR');
 
-  - You are about to drop the `UsageLog` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `User` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Voucher` table. If the table is not empty, all the data it contains will be lost.
+-- CreateEnum
+CREATE TYPE "VoucherStatus" AS ENUM ('ACTIVE', 'REDEEMED', 'EXPIRED', 'REVOKED');
 
-*/
--- DropForeignKey
-ALTER TABLE "UsageLog" DROP CONSTRAINT "UsageLog_userId_fkey";
-
--- DropForeignKey
-ALTER TABLE "UsageLog" DROP CONSTRAINT "UsageLog_voucherId_fkey";
-
--- DropForeignKey
-ALTER TABLE "Voucher" DROP CONSTRAINT "Voucher_redeemedById_fkey";
-
--- DropTable
-DROP TABLE "UsageLog";
-
--- DropTable
-DROP TABLE "User";
-
--- DropTable
-DROP TABLE "Voucher";
+-- CreateEnum
+CREATE TYPE "VoucherType" AS ENUM ('TIME', 'DATA', 'UNLIMITED');
 
 -- CreateTable
 CREATE TABLE "users" (
     "id" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "role" "Role" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
@@ -39,9 +23,15 @@ CREATE TABLE "vouchers" (
     "id" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "value" INTEGER NOT NULL,
+    "type" "VoucherType" NOT NULL DEFAULT 'TIME',
+    "status" "VoucherStatus" NOT NULL DEFAULT 'ACTIVE',
     "isRedeemed" BOOLEAN NOT NULL DEFAULT false,
+    "redeemedAt" TIMESTAMP(3),
     "redeemedById" TEXT,
+    "createdById" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "expiresAt" TIMESTAMP(3),
+    "note" TEXT,
 
     CONSTRAINT "vouchers_pkey" PRIMARY KEY ("id")
 );
@@ -64,6 +54,9 @@ CREATE UNIQUE INDEX "vouchers_code_key" ON "vouchers"("code");
 
 -- AddForeignKey
 ALTER TABLE "vouchers" ADD CONSTRAINT "vouchers_redeemedById_fkey" FOREIGN KEY ("redeemedById") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "vouchers" ADD CONSTRAINT "vouchers_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "usage_logs" ADD CONSTRAINT "usage_logs_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

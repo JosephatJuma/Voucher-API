@@ -15,13 +15,15 @@ datasource db {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  username  String     @unique
-  password  String
-  rolse     Role       @default(USER)
-  createdAt DateTime   @default(now())
-  Voucher   Voucher[]
-  UsageLog  UsageLog[]
+  id               String     @id @default(uuid())
+  username         String     @unique
+  password         String
+  role             Role       @default(USER)
+  createdAt        DateTime   @default(now())
+  vouchers         Voucher[]  @relation("createdBy")
+  redeemedVouchers Voucher[]  @relation("redeemedBy")
+  editedVouchers   Voucher[]  @relation("editedBy")
+  UsageLog         UsageLog[]
 
   @@map("users")
 }
@@ -33,22 +35,50 @@ enum Role {
 }
 
 model Voucher {
-  id           String     @id @default(uuid())
-  code         String     @unique
-  value        Int
-  isRedeemed   Boolean    @default(false)
-  redeemedBy   User?      @relation(fields: [redeemedById], references: [id])
+  id         String        @id @default(uuid())
+  code       String        @unique
+  value      Int // duration in minutes or megabytes, depending on system
+  type       VoucherType   @default(TIME)
+  status     VoucherStatus @default(ACTIVE)
+  isRevoked  Boolean       @default(false)
+  isRedeemed Boolean       @default(false)
+  redeemedAt DateTime? // when it was redeemed
+
+  redeemedBy   User?   @relation("redeemedBy", fields: [redeemedById], references: [id])
   redeemedById String?
-  createdAt    DateTime   @default(now())
-  UsageLog     UsageLog[]
+
+  createdBy   User?   @relation("createdBy", fields: [createdById], references: [id])
+  createdById String?
+
+  updatedBy   User?     @relation("editedBy", fields: [updatedById], references: [id])
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime?
+  note        String?
+
+  usageLogs UsageLog[]
 
   @@map("vouchers")
+}
+
+enum VoucherStatus {
+  ACTIVE
+  REDEEMED
+  EXPIRED
+  REVOKED
+}
+
+enum VoucherType {
+  TIME
+  DATA
+  UNLIMITED
 }
 
 model UsageLog {
   id        String   @id @default(uuid())
   userId    String
   voucherId String
+  message   String
   timestamp DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   voucher   Voucher  @relation(fields: [voucherId], references: [id])

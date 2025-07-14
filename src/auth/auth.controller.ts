@@ -12,8 +12,8 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
+        username: { type: 'string', example: 'admin' },
+        password: { type: 'string', example: 'admin@2025' },
       },
     },
   })
@@ -29,8 +29,8 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
+        username: { type: 'string', example: 'admin' },
+        password: { type: 'string', example: 'admin@2025' },
       },
     },
   })

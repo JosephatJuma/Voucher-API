@@ -1,21 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
 import * as process from 'node:process';
+import { Role } from '../../generated/prisma';
 
 @Injectable()
 export class JwtTokenService {
-  constructor(
-    private jwt: JwtService,
-    private prisma: PrismaService,
-  ) {}
-  async signTokens(userId: string, email: string, password: string) {
+  constructor(private jwt: JwtService) {}
+  async signTokens(userId: string, username: string, role: Role) {
     const [at, rt] = await Promise.all([
       this.jwt.signAsync(
         {
           userId,
-          email,
-          password,
+          username,
+          role,
         },
         {
           secret: process.env.APP_SECRET,
@@ -25,8 +22,8 @@ export class JwtTokenService {
       this.jwt.signAsync(
         {
           userId,
-          email,
-          password,
+          username,
+          role,
         },
         {
           secret: process.env.APP_SECRET,
