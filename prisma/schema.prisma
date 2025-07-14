@@ -21,6 +21,8 @@ model User {
   createdAt DateTime   @default(now())
   Voucher   Voucher[]
   UsageLog  UsageLog[]
+
+  @@map("users")
 }
 
 model Voucher {
@@ -32,6 +34,8 @@ model Voucher {
   redeemedById String?
   createdAt    DateTime   @default(now())
   UsageLog     UsageLog[]
+
+  @@map("vouchers")
 }
 
 model UsageLog {
@@ -41,4 +45,6 @@ model UsageLog {
   timestamp DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   voucher   Voucher  @relation(fields: [voucherId], references: [id])
+
+  @@map("usage_logs")
 }
