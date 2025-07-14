@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  username  String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  Voucher   Voucher[]
+  UsageLog  UsageLog[]
+}
+
+model Voucher {
+  id           String     @id @default(uuid())
+  code         String     @unique
+  value        Int
+  isRedeemed   Boolean    @default(false)
+  redeemedBy   User?      @relation(fields: [redeemedById], references: [id])
+  redeemedById String?
+  createdAt    DateTime   @default(now())
+  UsageLog     UsageLog[]
+}
+
+model UsageLog {
+  id        String   @id @default(uuid())
+  userId    String
+  voucherId String
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  voucher   Voucher  @relation(fields: [voucherId], references: [id])
+}
