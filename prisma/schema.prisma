@@ -85,3 +85,13 @@ model UsageLog {
 
   @@map("usage_logs")
 }
+
+enum LogType {
+  AUTH_LOG // Authentication log
+  VOUCHER_ACTION_LOG // Voucher creation, updates, revokes
+  USAGE_LOG // Voucher redemption, consumption
+  PAYMENT_LOG // Payment initiation, success, failure
+  NOTIFICATION // SMS or email send/failed
+  SECURITY_LOG // Unauthorized access, token abuse
+  AUDIT_LOG
+}

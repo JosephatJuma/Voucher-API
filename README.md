@@ -1,99 +1,107 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+Setting up the development environment
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Step 1:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+clone this repo
 
-## Description
+## Step 2:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Move to the cloned directory
+`cd Voucher-API `
 
-## Project setup
+## Step 3:
 
-```bash
-$ npm install
+Install the required modules and dependencies
+
+Run `npm install`
+
+## Step 4:
+
+step up the environment variables
+
+Run `touch .env` to create .env file in the root dir
+
+In the env file
+
+Add env variables to look like those in the .env.example file in the root dir
+
+## Step 5
+
+- With postgresql Database running on localhost port 5432, Run migrations to the local database
+  Run 
+` npx prisma init --datasource-provider sqlite --output ../generated/prisma npm run migrate dev`
+`npx prisma migrate dev --name init`
+- In case your database is running on a different port, change the port in the env variable DATABASE_URL
+
+This will create a new debase called voucher_db on the local server and everything is app for local development
+
+# REST APIS Docs
+
+- See documentations at `http://localhost:3000/api/docs` for swagger docs
+
+## Authentication
+
+- Register a user
+
+POST /auth/register
+api BODY
+```
+{
+    "username": "username",
+    "password": "password",
+    "role": "USER"
+}
 ```
 
-## Compile and run the project
+role is optional and will default to USER
+role can be ADMIN, USER or VENDOR
 
-```bash
-# development
-$ npm run start
+Response Body
+```
+{
+  "message": "User created successfully",
+  "user": {
+    "username": "admin10",
+    "id": "a0aa1a6b-0cc1-4875-8fd7-43f9b7a5da74",
+    "role": "ADMIN"
+  }
+}
+````
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+- Login a user
+- POST /auth/login
+API BODY
+```
+{
+    "username": "username",
+    "password": "password"
+}
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Response Body
+```
+{
+  "tokens": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyYjc0N2Y1My03MzE0LTQzNTUtYTY1Zi1jZmQwMWJiZWM1ODYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUyNTE5NDU1LCJleHAiOjE3NjExNTk0NTV9.8ZvDttHcgJLXE5pi-srlD3zuKt3LuVaWhCxO6h9jKpc",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyYjc0N2Y1My03MzE0LTQzNTUtYTY1Zi1jZmQwMWJiZWM1ODYiLCJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzUyNTE5NDU1LCJleHAiOjE3NjExNTk0NTV9.8ZvDttHcgJLXE5pi-srlD3zuKt3LuVaWhCxO6h9jKpc"
+  },
+  "message": "Login successful",
+  "user": {
+    "username": "admin",
+    "id": "2b747f53-7314-4355-a65f-cfd01bbec586"
+  }
+}
 ```
 
-## Deployment
+## VOUCHER APIs
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- GET /vouchers
+- GET /vouchers/:id
+- POST /vouchers
+- PUT /vouchers/:id
+- DELETE /vouchers/:id
+- PATCH /vouchers/:id/redeem
+- PATCH /vouchers/:id/revoke
+Requires authentication and role based authorization to access
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+The API docs can be found at `http://localhost:3000/api/docs`
