@@ -79,7 +79,7 @@ export class VoucherController {
   @ApiResponse({ status: 200, description: 'Voucher found' })
   @ApiResponse({ status: 404, description: 'Voucher not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  getVoucher(@Body() id: string) {
+  getVoucher(@Param('id') id: string) {
     return this.voucherService.getVoucher(id);
   }
 
@@ -131,7 +131,7 @@ export class VoucherController {
   @ApiResponse({ status: 404, description: 'Voucher not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @UseGuards(RolesGuard(['ADMIN']))
-  deleteVoucher(@Body() id: string) {
+  deleteVoucher(@Param('id') id: string) {
     return this.voucherService.deleteVoucher(id);
   }
 
@@ -143,7 +143,7 @@ export class VoucherController {
   @ApiResponse({ status: 404, description: 'Voucher not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @UseGuards(RolesGuard(['ADMIN']))
-  revokeVoucher(@Body() id: string) {
+  revokeVoucher(@Param('id') id: string) {
     return this.voucherService.revokeVoucher(id);
   }
 
@@ -167,7 +167,7 @@ export class VoucherController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   @UseGuards(RolesGuard(['USER']))
-  redeemVoucher(@Body() data: VoucherRedeemDto) {
+  redeemVoucher(@Param('id') id: string, @Body() data: VoucherRedeemDto) {
     return this.voucherService.redeemVoucher(data);
   }
 }

@@ -16,7 +16,7 @@ export class VoucherService {
 
   async createVoucher(dto: VoucherCreationDto) {
     const user = await this.prisma.user.findUnique({
-      where: { id: dto.createdById, role: { in: ['ADMIN', 'VENDOR'] } },
+      where: { id: dto.createdById, role: { in: ['ADMIN', 'VENDOR'] }},
     });
     if (!user) {
       return new UnauthorizedException(
@@ -66,6 +66,7 @@ export class VoucherService {
       where: { id },
       data: {
         isRevoked: true,
+        status:'REVOKED'
       },
     });
   }
