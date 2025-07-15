@@ -47,7 +47,7 @@ export class VoucherController {
             'Voucher duration in minutes or megabytes, depending on system/voucher type',
           example: 1000000,
         },
-        notes: {
+        note: {
           type: 'string',
           description: 'Voucher notes',
           example: 'lorem ipsum',
