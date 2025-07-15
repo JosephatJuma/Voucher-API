@@ -39,7 +39,7 @@ This will create a new debase called voucher_db on the local server and everythi
 
 # REST APIS Docs
 
-- See documentations at `http://localhost:3000/api/docs` for swagger docs
+- See documentations at `http://localhost:3000/` for swagger docs
 
 ## Authentication
 
@@ -106,4 +106,4 @@ Response Body
 - PATCH /vouchers/:id/revoke
 Requires authentication and role based authorization to access
 
-The API docs can be found at `http://localhost:3000/api/docs`
+The API docs can be found at `http://localhost:3000/`
